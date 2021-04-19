@@ -1,10 +1,8 @@
-package com.myorg;
+package se.chalmers;
 
+import se.chalmers.QnaQuerytableStack;
 import software.amazon.awscdk.core.App;
-import software.amazon.awscdk.core.Environment;
 import software.amazon.awscdk.core.StackProps;
-
-import java.util.Arrays;
 
 public class QnaQuerytableApp {
     public static void main(final String[] args) {
