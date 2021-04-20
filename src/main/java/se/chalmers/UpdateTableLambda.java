@@ -25,16 +25,13 @@ import com.amazonaws.services.s3.model.S3Object;
 
 public class UpdateTableLambda implements RequestHandler<S3Event, String>
 {
-    private static final String HEADER_ROW = "Pokemon";
-    private String[] elements;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private LambdaLogger logger;
-    private static final String STRENGTH_TABLE_NAME = System.getenv("STRENGTH_TABLE_NAME");
-    private static final String STRENGTH_PRIMARY_KEY = System.getenv("STRENGTH_PRIMARY_KEY");
-    private static final String STRENGTH_SINGLE_VALUE_KEY =  System.getenv("STRENGTH_SINGLE_VALUE_KEY");
-    private static final String STRENGTH_ALL_VALUES_KEY =  System.getenv("STRENGTH_ALL_VALUES_KEY");
+    private static final String QNA_LIST_TABLE_NAME = System.getenv("QNA_LIST_TABLE_NAME");
+    private static final String QNA_LIST_PRIMARY_KEY = System.getenv("QNA_LIST_PRIMARY_KEY");
+    private static final String QNA_LIST_SORT_KEY =  System.getenv("QNA_LIST_SORT_KEY");
+    private static final String QNA_LIST_VALUE_KEY =  System.getenv("QNA_LIST_VALUE_KEY");
 
-    private HashMap<String, String> attackEffects = new HashMap<>(50);
 
     @Override
     public String handleRequest(S3Event event, Context context)
@@ -42,10 +39,6 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         if (event == null && context == null)
         {
             parseLocalFile();
-
-            for (String key : attackEffects.keySet())
-                System.out.println(key + "\t" + attackEffects.get(key));
-
             System.exit(0);
         }
 
@@ -79,22 +72,22 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
 
     public static void main(String[] args)
     {
-        new SeedDynamoDB().handleRequest(null, null);
+        new UpdateTableLambda().handleRequest(null, null);
     }
 
     private void parseLocalFile()
     {
         File startDir = new File(System.getProperty("user.dir"));
-        File strengthTable = new File(startDir + "\\assets", "strength.csv");
+        File testFile = new File(startDir + "\\test\\resources\\", "fruit.csv");
         InputStream inputStream = null;
 
         try
         {
-            inputStream = new FileInputStream(strengthTable);
+            inputStream = new FileInputStream(testFile);
         }
         catch (IOException e)
         {
-            System.err.println("Error opening local file: " + strengthTable + "\n" + e);
+            System.err.println("Error opening local file: " + testFile + "\n" + e);
             System.exit(1);
         }
 
@@ -104,7 +97,7 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         }
         catch (IOException e)
         {
-            System.err.println("Error reading file: " + strengthTable + "\n" + e);
+            System.err.println("Error reading file: " + testFile + "\n" + e);
             System.exit(1);
         }
     }
@@ -117,28 +110,6 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         while((line = reader.readLine()) != null)
         {
             parseLine(line);
-        }
-
-        // And the other way around...
-        for (ElementTypes defenseElement : ElementTypes.values())
-        {
-            String values = ""; // "[ ";
-            boolean first = true;
-
-            for (ElementTypes attackElement : ElementTypes.values())
-            {
-                String thisValue = attackEffects.get(attackElement.toString() + "_" + defenseElement.toString());
-
-                if (first)
-                {
-                    values += thisValue;
-                    first = false;
-                }
-                else
-                    values += " ," + thisValue;
-            }
-            //values += " ]";
-            attackEffects.put(defenseElement.toString() + "_Defense_All", values);
         }
     }
 

@@ -20,6 +20,8 @@ import software.amazon.awscdk.services.s3.EventType;
 
 import java.util.*;
 
+import static se.chalmers.Configuration.*;
+
 public class QnaQuerytableStack extends Stack
 {
     public QnaQuerytableStack(final Construct scope, final String id) {
@@ -37,14 +39,15 @@ public class QnaQuerytableStack extends Stack
         //=======================================================================
 
         Attribute primaryKeyAttribute = Attribute.builder()
-                .name("Topic")
+                .name(QNA_LIST_PRIMARY_KEY)
                 .type(AttributeType.STRING).build();
 
         Attribute sortKeyAttribute = Attribute.builder()
-                .name("Sort")
+                .name(QNA_LIST_SORT_KEY)
                 .type(AttributeType.STRING).build();
 
         Table qnaListTable = new Table(this, "qna-list-table", TableProps.builder()
+                .tableName(QNA_LIST_TABLE_NAME)
                 .partitionKey(primaryKeyAttribute)
                 .sortKey(sortKeyAttribute)
                 .build());
@@ -74,6 +77,7 @@ public class QnaQuerytableStack extends Stack
                 .assumedBy(lambdaPrincipal)
                 .build());
 
+
         //=======================================================================
         // Attaching a role that will allow AWS Lambda to access logs
         //=======================================================================
@@ -83,18 +87,18 @@ public class QnaQuerytableStack extends Stack
                 .resources(Collections.singletonList("*"))
                 .build() ));
 
-        /*
-
-
         //=======================================================================
         // Building our API Lambda function
         //=======================================================================
         Map<String, String> lambdaEnvMap = new HashMap<String, String>()
         {{
-            put("QNA_LIST_TABLE_NAME", qnaListTable.getTableName());
-            put("QNA_LIST_SINGLE_VALUE_KEY", "value");
+            put("QNA_LIST_TABLE_NAME", QNA_LIST_TABLE_NAME);
+            put("QNA_LIST_PRIMARY_KEY", QNA_LIST_PRIMARY_KEY);
+            put("QNA_LIST_SORT_KEY", QNA_LIST_SORT_KEY);
+            put("QNA_LIST_VALUE_KEY", QNA_LIST_VALUE_KEY);
         }};
 
+                /*
         Function strengthLambda = new Function(qnaListTable, "qna-list-qna-lambda", FunctionProps.builder()
                 .code(Code.fromAsset("./out/artifacts/lambda/qna.jar"))
                 .handler("com.myorg.lambda.FindWeakness::handleRequest")
