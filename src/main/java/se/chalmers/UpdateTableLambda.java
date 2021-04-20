@@ -6,6 +6,9 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -31,6 +34,8 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
     private static final String QNA_LIST_PRIMARY_KEY = System.getenv("QNA_LIST_PRIMARY_KEY");
     private static final String QNA_LIST_SORT_KEY =  System.getenv("QNA_LIST_SORT_KEY");
     private static final String QNA_LIST_VALUE_KEY =  System.getenv("QNA_LIST_VALUE_KEY");
+    private Set<TableRow> rows = new HashSet<>();
+    private String topic;
 
 
     @Override
@@ -39,6 +44,9 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         if (event == null && context == null)
         {
             parseLocalFile();
+            for (TableRow row : rows)
+                System.out.println(row);
+
             System.exit(0);
         }
 
@@ -60,7 +68,7 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         {
             // Change to insert all the values at once!
             parseFile(objectData);
-            seedStrengthsTable();
+            //seedStrengthsTable();
         }
         catch (IOException e)
         {
@@ -78,8 +86,9 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
     private void parseLocalFile()
     {
         File startDir = new File(System.getProperty("user.dir"));
-        File testFile = new File(startDir + "\\test\\resources\\", "fruit.csv");
+        File testFile = new File(startDir + "\\src\\test\\resources\\", "fruit.csv");
         InputStream inputStream = null;
+        topic = "fruit";
 
         try
         {
@@ -115,27 +124,11 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
 
     private void parseLine(String line)
     {
-        if (line.startsWith(HEADER_ROW))
-            getElements(line);
-        else
-        {
-            String[] parts = line.split(";");
-            String allEffects = ""; //""[ ";
-
-            for (int i = 1;i < parts.length; i++)
-            {
-                attackEffects.put(parts[0] + "_" + elements[i], parts[i]);
-
-                if (i != 1)
-                    allEffects += ", ";
-                allEffects += parts[i];
-            }
-            // allEffects += " ]";
-
-            attackEffects.put(parts[0] + "_Attack_All", allEffects);
-        }
+        String[] parts = line.split(";");
+        rows.add(new TableRow(topic, parts[0], parts[1]));
     }
 
+    /*
     private void seedStrengthsTable()
     {
         logger.log("seedDynamoTable()\nTable: " + STRENGTH_TABLE_NAME + "\nprimary key: " + STRENGTH_PRIMARY_KEY +
@@ -182,4 +175,5 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         String[] parts = line.split(";");
         elements = Arrays.copyOfRange(parts, 0, parts.length);
     }
+     */
 }
