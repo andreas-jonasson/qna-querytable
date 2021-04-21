@@ -9,7 +9,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cdk.version>1.99.0</cdk.version>
+        <cdk.version>1.100.0</cdk.version>
         <junit.version>5.7.1</junit.version>
     </properties>
 
@@ -30,14 +30,14 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <mainClass>se.chalmers.QnaQuerytableApp</mainClass>
+                    <mainClass>se.chalmers.QnATable.QnaQuerytableApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
     <dependencies>
-        <!-- AWS Cloud Development Kit -->
+        <!-- AWS Cloud Development Kit         -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
@@ -64,24 +64,29 @@
             <version>${cdk.version}</version>
         </dependency>
         <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>dynamodb</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
             <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-events</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.1000</version>
+            <version>1.11.926</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>1.11.1000</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-lambda-java-events</artifactId>
-            <version>3.8.0</version>
+            <version>1.11.926</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -107,5 +112,6 @@
             <version>3.18.1</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 </project>
