@@ -5,11 +5,12 @@ Upload lists to a bucket that can be queried from the QnA-bot.
 
 fruits.csv:
 
+> yellow#tittle;These are the sunshine fruits:\
 > yellow;Banana\
 > yellow;Lemon\
+> green#title;Green is good!\
 > green;Lime\
 > green;Grape\
-> purple;Grape
 
 In QnA-bot:
 
