@@ -117,17 +117,37 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
     {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
+        int rownumber = 0;
 
         while((line = reader.readLine()) != null)
         {
-            parseLine(line);
+            parseLine(line, rownumber);
+            rownumber++;
         }
     }
 
-    private void parseLine(String line)
+    private void parseLine(String line, int rownumber)
     {
         String[] parts = line.split(";");
-        rows.add(new TableRow(topic, parts[0], parts[1]));
+
+        if (parts == null || parts.length < 2)
+        {
+            logger.log("Discarding bad input on line#: " + rownumber + "\t" + line);
+            return;
+        }
+
+        String sortKey = parts[0].toLowerCase();
+        String value = parts[1];
+
+        if (!sortKey.endsWith("#title"))
+        {
+            if (rownumber <= 9)
+                sortKey = sortKey + "_0" + rownumber;
+            else
+                sortKey = sortKey + "_" + rownumber;
+        }
+
+        rows.add(new TableRow(topic, sortKey, value));
     }
 
     private void updateQnaTable()
