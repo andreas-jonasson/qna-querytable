@@ -16,6 +16,7 @@ In QnA-bot:
 
 list green fruit
 
+Green is good!\
 Lime\
 Grape
 

@@ -161,7 +161,6 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         {
             HashMap<String, AttributeValue> itemValues = new HashMap<String, AttributeValue>();
 
-            // Bug here. Non-uniqe keys lead to overwriting. Check practical usage before fixing.
             itemValues.put(QNA_LIST_PRIMARY_KEY, new AttributeValue().withS(row.primaryKey));
             itemValues.put(QNA_LIST_SORT_KEY, new AttributeValue().withS(row.sortingKey));
             itemValues.put(QNA_LIST_VALUE_KEY, new AttributeValue().withS(row.value));
