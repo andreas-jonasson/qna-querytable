@@ -34,7 +34,6 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
     private static final String QNA_LIST_SORT_KEY =  System.getenv("QNA_LIST_SORT_KEY");
     private static final String QNA_LIST_VALUE_KEY =  System.getenv("QNA_LIST_VALUE_KEY");
     private Set<TableRow> rows = new HashSet<>();
-    private String topic;
 
 
     @Override
@@ -42,10 +41,9 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
     {
         if (event == null && context == null)
         {
-            parseLocalFile();
+            rows = parseLocalFile();
             for (TableRow row : rows)
                 System.out.println(row);
-
             System.exit(0);
         }
 
@@ -53,7 +51,7 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         logger.log("Inside SeedDynamoDB::handleRequest");
         logger.log("Event:\n" + gson.toJson(event));
 
-        topic = event.getRecords().get(0).getS3().getObject().getKey().toLowerCase();
+        String topic = event.getRecords().get(0).getS3().getObject().getKey().toLowerCase();
         topic = topic.substring(0, topic.lastIndexOf('.'));
 
         S3EventNotification.S3EventNotificationRecord record = event.getRecords().get(0);
@@ -63,14 +61,14 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         // Download the content from S3 into a stream
         AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
         S3Object s3Object = s3Client.getObject(new GetObjectRequest(
-                srcBucket, srcKey));
+             srcBucket, srcKey));
         InputStream objectData = s3Object.getObjectContent();
 
         try
         {
-            // Change to insert all the values at once!
-            parseFile(objectData);
-            updateQnaTable();
+             // Change to insert all the values at once!
+             parseFile(objectData, rows, topic);
+             updateQnaTable();
         }
         catch (IOException e)
         {
@@ -85,12 +83,12 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         new UpdateTableLambda().handleRequest(null, null);
     }
 
-    private void parseLocalFile()
+    public static Set<TableRow> parseLocalFile()
     {
         File startDir = new File(System.getProperty("user.dir"));
         File testFile = new File(startDir + "\\src\\test\\resources\\", "fruit.csv");
         InputStream inputStream = null;
-        topic = "fruit";
+        Set<TableRow> rows = new HashSet<>();
 
         try
         {
@@ -104,16 +102,18 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
 
         try
         {
-            parseFile(inputStream);
+            parseFile(inputStream, rows, "fruit");
         }
         catch (IOException e)
         {
             System.err.println("Error reading file: " + testFile + "\n" + e);
             System.exit(1);
         }
+
+        return rows;
     }
 
-    private void parseFile(InputStream inputStream) throws IOException
+    private static void parseFile(InputStream inputStream, Set<TableRow> rows, String topic) throws IOException
     {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
@@ -121,18 +121,18 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
 
         while((line = reader.readLine()) != null)
         {
-            parseLine(line, rownumber);
+            parseLine(line, rownumber, rows, topic);
             rownumber++;
         }
     }
 
-    private void parseLine(String line, int rownumber)
+    private static void parseLine(String line, int rownumber, Set<TableRow> rows, String topic)
     {
         String[] parts = line.split(";");
 
         if (parts == null || parts.length < 2)
         {
-            logger.log("Discarding bad input on line#: " + rownumber + "\t" + line);
+            System.err.println("Discarding bad input on line#: " + rownumber + "\t" + line);
             return;
         }
 
