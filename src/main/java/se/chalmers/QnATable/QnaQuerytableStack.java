@@ -148,11 +148,15 @@ public class QnaQuerytableStack extends Stack
                 .value(updateLambda.getFunctionArn())
                 .build();
 
-                /*
-        Function strengthLambda = new Function(qnaListTable, "qna-list-qna-lambda", FunctionProps.builder()
-                .code(Code.fromAsset("./out/artifacts/lambda/qna.jar"))
-                .handler("com.myorg.lambda.FindWeakness::handleRequest")
-                .functionName("pokemon-weakness-lambda")
+        //=======================================================================
+        // Create the query table Lambda function that is triggered from the
+        // QnA-bot
+        //=======================================================================
+
+        Function queryLambda = new Function(qnaListTable, "qna-table-query-lambda", FunctionProps.builder()
+                .code(Code.fromAsset("./out/artifacts/lambda/qna-querytable.jar"))
+                .handler("se.chalmers.QnATable.QueryTableLambda::handleRequest")
+                .functionName("QNA-query-table-lambda")
                 .runtime(Runtime.JAVA_11)
                 .role(lambdaApiRole)
                 .environment(lambdaEnvMap)
@@ -160,12 +164,11 @@ public class QnaQuerytableStack extends Stack
                 .memorySize(1024)
                 .build());
 
-        qnaListTable.grantReadData(strengthLambda);
+        qnaListTable.grantReadData(queryLambda);
 
-        CfnOutput.Builder.create(this, "lambda-weakness-output")
-                .description("lambda-weakness-arn")
-                .value(strengthLambda.getFunctionArn())
+        CfnOutput.Builder.create(this, "qna-table-query-lambda-output")
+                .description("qna-table-query-lambda-arn")
+                .value(queryLambda.getFunctionArn())
                 .build();
-         */
     }
 }
