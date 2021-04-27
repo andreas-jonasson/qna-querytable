@@ -10,7 +10,7 @@ fruits.csv:
 > yellow;Lemon\
 > green#title;Green is good!\
 > green;Lime\
-> green;Grape\
+> green;Grape
 
 In QnA-bot:
 
