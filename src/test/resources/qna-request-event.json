@@ -1,0 +1,200 @@
+{
+  "req": {
+    "_event": {
+      "messageVersion": "1.0",
+      "invocationSource": "FulfillmentCodeHook",
+      "userId": "eu-west-1:c5fe7e04-fcab-4863-a96e-4e7f112432e3",
+      "sessionAttributes": {
+        "qnabot_qid": "General_tram_stops_1_en",
+        "navigation": "{\"next\":\"\",\"previous\":[],\"hasParent\":true}",
+        "qnabot_gotanswer": "true",
+        "previous": "{\"qid\":\"General_tram_stops_1_en\",\"a\":\"Form \\\"where\\\" to \\\"where\\\"?\",\"alt\":{},\"q\":\"buss\"}",
+        "qnabotcontext": "{\"elicitResponse\":{\"responsebot\":\"QnAGetTramStops\",\"namespace\":\"stops\",\"chainingConfig\":\"d086d8d84101e398d56df15517022ae8cb3a6cfa733c9c61fef9068e3daa8c032a9019411250bf0675e7c33b6cfe562bq2lMZhDEiXar0rGPQvVd4Q==\",\"progress\":\"ConfirmIntent\"}}",
+        "undefined": "{}"
+      },
+      "requestAttributes": null,
+      "bot": {
+        "name": "QnABot_BotaJKAC",
+        "alias": "live",
+        "version": "1"
+      },
+      "outputDialogMode": "Text",
+      "currentIntent": {
+        "name": "fulfilment_IntentXisRUpvNIZ",
+        "slots": {
+          "slot": "Yes"
+        },
+        "slotDetails": {
+          "slot": {
+            "resolutions": [
+              {
+                "value": "yes"
+              }
+            ],
+            "originalValue": "Yes"
+          }
+        },
+        "confirmationStatus": "None",
+        "nluIntentConfidenceScore": null
+      },
+      "alternativeIntents": [],
+      "inputTranscript": "Yes",
+      "recentIntentSummaryView": [
+        {
+          "intentName": "qnabotfallbackfulfilment_IntentsKZrNjxEd",
+          "checkpointLabel": null,
+          "slots": {},
+          "confirmationStatus": "None",
+          "dialogActionType": "Close",
+          "fulfillmentState": "Fulfilled",
+          "slotToElicit": null
+        }
+      ],
+      "sentimentResponse": null,
+      "kendraResponse": null,
+      "errorFound": false
+    },
+    "_settings": {
+      "ENABLE_DEBUG_RESPONSES": false,
+      "ES_USE_KEYWORD_FILTERS": true,
+      "ES_KEYWORD_SYNTAX_TYPES": "NOUN,PROPN,VERB,INTJ",
+      "ES_SYNTAX_CONFIDENCE_LIMIT": ".20",
+      "ES_MINIMUM_SHOULD_MATCH": "2<75%",
+      "ES_NO_HITS_QUESTION": "no_hits",
+      "ES_USE_FUZZY_MATCH": false,
+      "ES_PHRASE_BOOST": "4",
+      "ES_SCORE_ANSWER_FIELD": false,
+      "ENABLE_SENTIMENT_SUPPORT": true,
+      "ENABLE_MULTI_LANGUAGE_SUPPORT": false,
+      "MINIMUM_CONFIDENCE_SCORE": 0.6,
+      "ALT_SEARCH_KENDRA_INDEXES": [],
+      "ERRORMESSAGE": "Unfortunately I encountered an error when searching for your answer. Please ask me again later.",
+      "EMPTYMESSAGE": "You stumped me! Sadly I don't know how to answer your question.",
+      "DEFAULT_ALEXA_LAUNCH_MESSAGE": "Hello, Please ask a question",
+      "DEFAULT_ALEXA_STOP_MESSAGE": "Goodbye",
+      "SMS_HINT_REMINDER_ENABLE": true,
+      "SMS_HINT_REMINDER": " (Feedback? Reply THUMBS UP or THUMBS DOWN. Ask HELP ME at any time)",
+      "SMS_HINT_REMINDER_INTERVAL_HRS": "24",
+      "IDENTITY_PROVIDER_JWKS_URLS": [],
+      "ENFORCE_VERIFIED_IDENTITY": false,
+      "NO_VERIFIED_IDENTITY_QUESTION": "no_verified_identity",
+      "ELICIT_RESPONSE_MAX_RETRIES": 3,
+      "ELICIT_RESPONSE_RETRY_MESSAGE": "Please try again?",
+      "ELICIT_RESPONSE_BOT_FAILURE_MESSAGE": "Your response was not understood. Please start again.",
+      "ELICIT_RESPONSE_DEFAULT_MSG": "Ok. ",
+      "ENABLE_REDACTING": false,
+      "REDACTING_REGEX": "\\b\\d{4}\\b(?![-])|\\b\\d{9}\\b|\\b\\d{3}-\\d{2}-\\d{4}\\b",
+      "DEFAULT_USER_POOL_JWKS_URL": "https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_HSKKAyEVp/.well-known/jwks.json"
+    },
+    "_type": "LEX",
+    "_userId": "eu-west-1:c5fe7e04-fcab-4863-a96e-4e7f112432e3",
+    "question": "Timetable",
+    "session": {
+      "qnabot_qid": "General_tram_stops_1_en",
+      "navigation": {
+        "next": "",
+        "previous": [],
+        "hasParent": true
+      },
+      "qnabot_gotanswer": true,
+      "previous": {
+        "qid": "General_tram_stops_1_en",
+        "a": "Form \"where\" to \"where\"?",
+        "alt": {},
+        "q": "buss"
+      },
+      "qnabotcontext": {
+        "elicitResponse": {
+          "responsebot": "QnAGetTramStops",
+          "namespace": "stops",
+          "chainingConfig": "d086d8d84101e398d56df15517022ae8cb3a6cfa733c9c61fef9068e3daa8c032a9019411250bf0675e7c33b6cfe562bq2lMZhDEiXar0rGPQvVd4Q==",
+          "progress": "ConfirmIntent"
+        }
+      },
+      "undefined": {}
+    },
+    "_preferredResponseType": "PlainText",
+    "_clientType": "LEX.LexWebUI.Text",
+    "sentiment": "MIXED",
+    "_userInfo": {
+      "InteractionCount": 3,
+      "UserId": "eu-west-1:c5fe7e04-fcab-4863-a96e-4e7f112432e3",
+      "FirstSeen": "Thu Nov 26 2020 12:29:03 GMT+0000 (Coordinated Universal Time)",
+      "LastSeen": "Thu Nov 26 2020 12:29:38 GMT+0000 (Coordinated Universal Time)",
+      "TimeSinceLastInteraction": 6.998,
+      "isVerifiedIdentity": "false"
+    },
+    "_info": {
+      "es": {
+        "address": "search-qnabot-elastic-p0so358az11g-ynaeupoirijryrnvwjlv4nj5t4.eu-west-1.es.amazonaws.com",
+        "index": "qnabot",
+        "type": "qna",
+        "service": {
+          "qid": "QnABot-ESQidLambda-XEUA6GAIJ7V6",
+          "proxy": "QnABot-ESProxyLambda-U6VYMMAHNEXV"
+        }
+      }
+    }
+  },
+  "res": {
+    "type": "PlainText",
+    "message": "Ok. 16 Quite soon\n6   Not so soon\n7   Cancelled\n10 Very soon",
+    "session": {
+      "qnabot_qid": "General_tram_timetable_1_en",
+      "navigation": {
+        "next": "",
+        "previous": [],
+        "hasParent": true
+      },
+      "qnabot_gotanswer": true,
+      "previous": {
+        "qid": "General_tram_timetable_1_en",
+        "a": "Ok. 16 Quite soon\n6   Not so soon\n7   Cancelled\n10 Very soon",
+        "alt": {},
+        "q": "Timetable"
+      },
+      "qnabotcontext": {
+        "elicitResponse": {}
+      },
+      "undefined": {},
+      "stops": {
+        "END_STOP": "högskolan trollhättan",
+        "START_STOP": "Lindholmen"
+      },
+      "appContext": {
+        "altMessages": {}
+      }
+    },
+    "card": {
+      "send": false,
+      "title": "",
+      "text": "",
+      "url": ""
+    },
+    "_userInfo": {
+      "InteractionCount": 4,
+      "UserId": "eu-west-1:c5fe7e04-fcab-4863-a96e-4e7f112432e3",
+      "FirstSeen": "Thu Nov 26 2020 12:29:03 GMT+0000 (Coordinated Universal Time)",
+      "LastSeen": "Thu Nov 26 2020 12:29:44 GMT+0000 (Coordinated Universal Time)",
+      "TimeSinceLastInteraction": 6.998,
+      "isVerifiedIdentity": "false"
+    },
+    "plainMessage": "Ok. 16 Quite soon\n6   Not so soon\n7   Cancelled\n10 Very soon",
+    "got_hits": 1,
+    "result": {
+      "qid": "General_tram_timetable_1_en",
+      "quniqueterms": " Timetable  ",
+      "questions": [
+        {
+          "q": "Timetable"
+        }
+      ],
+      "a": "Ok. 16 Quite soon\n6   Not so soon\n7   Cancelled\n10 Very soon",
+      "l": "arn:aws:lambda:eu-west-1:953496132903:function:QnABot-Vasttrafik",
+      "type": "qna",
+      "autotranslate": {
+        "a": true
+      }
+    }
+  }
+}
