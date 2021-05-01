@@ -2,10 +2,12 @@ package se.chalmers.QnATable;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.GetItemOutcome;
-import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.*;
+import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -15,14 +17,17 @@ import se.chalmers.qna.fulfillment.model.QNABotFullfillmentRequest;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class QueryTableLambda implements RequestHandler<QNABotFullfillmentRequest, String>
 {
+    private static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+    private static DynamoDB dynamoDB = new DynamoDB(client);
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private LambdaLogger logger;
     private static final String QNA_LIST_TABLE_NAME = System.getenv("QNA_LIST_TABLE_NAME");
-    private static final String QNA_LIST_PRIMARY_KEY = System.getenv("QNA_LIST_PRIMARY_KEY");
+    private static final String QNA_LIST_PARTITION_KEY = System.getenv("QNA_LIST_PARTITION_KEY");
     private static final String QNA_LIST_SORT_KEY =  System.getenv("QNA_LIST_SORT_KEY");
     private static final String QNA_LIST_VALUE_KEY =  System.getenv("QNA_LIST_VALUE_KEY");
     private static final AmazonDynamoDB ddb = AmazonDynamoDBClientBuilder.defaultClient();
@@ -54,14 +59,26 @@ public class QueryTableLambda implements RequestHandler<QNABotFullfillmentReques
         category = getCategory(event);
         category = "yellow";
 
-        request = createItemRequest(topic, category);
+        queryTable(topic, category);
 
         return "Done.";
     }
 
-    private GetItemRequest createItemRequest(String primaryKey, String sortKey)
+    private void queryTable(String partitionKey, String sortKey)
     {
-        return new GetItemRequest();
+        Table table = dynamoDB.getTable(QNA_LIST_TABLE_NAME);
+
+        QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(QNA_LIST_PARTITION_KEY + " = :t and begins_with(" + QNA_LIST_SORT_KEY + ", :q)")
+                    .withValueMap(new ValueMap().withString(":t", partitionKey).withString(":q", sortKey));
+
+        ItemCollection<QueryOutcome> items = table.query(querySpec);
+
+        Iterator<Item> iterator = items.iterator();
+        Item item = null;
+        while (iterator.hasNext()) {
+            item = iterator.next();
+            System.out.println(item.toJSONPretty());
+        }
     }
 
     private String getTopic(QNABotFullfillmentRequest event)
@@ -73,17 +90,4 @@ public class QueryTableLambda implements RequestHandler<QNABotFullfillmentReques
     {
         return "";
     }
-
-    private Set<TableRow> getList(String topic, String category)
-    {
-        Set<TableRow> result = new HashSet<>();
-
-        HashMap<String,AttributeValue> key_to_get =
-                new HashMap<String,AttributeValue>();
-
-        //key_to_get.put(QNA_LIST_TABLE_NAME, new AttributeValue(name));
-
-        return result;
-    }
-
 }

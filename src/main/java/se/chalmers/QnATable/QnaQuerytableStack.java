@@ -38,7 +38,7 @@ public class QnaQuerytableStack extends Stack
         //=======================================================================
 
         Attribute primaryKeyAttribute = Attribute.builder()
-                .name(QNA_LIST_PRIMARY_KEY)
+                .name(QNA_LIST_PARTITION_KEY)
                 .type(AttributeType.STRING).build();
 
         Attribute sortKeyAttribute = Attribute.builder()
@@ -92,7 +92,7 @@ public class QnaQuerytableStack extends Stack
         Map<String, String> lambdaEnvMap = new HashMap<String, String>()
         {{
             put("QNA_LIST_TABLE_NAME", QNA_LIST_TABLE_NAME);
-            put("QNA_LIST_PRIMARY_KEY", QNA_LIST_PRIMARY_KEY);
+            put("QNA_LIST_PARTITION_KEY", QNA_LIST_PARTITION_KEY);
             put("QNA_LIST_SORT_KEY", QNA_LIST_SORT_KEY);
             put("QNA_LIST_VALUE_KEY", QNA_LIST_VALUE_KEY);
         }};
