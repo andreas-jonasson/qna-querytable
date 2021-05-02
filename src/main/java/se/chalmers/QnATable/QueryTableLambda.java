@@ -59,12 +59,12 @@ public class QueryTableLambda implements RequestHandler<QNABotFullfillmentReques
         category = getCategory(event);
         category = "yellow";
 
-        queryTable(topic, category);
+        QueryResult result = queryTable(topic, category);
 
-        return "Done.";
+        return result.toString();
     }
 
-    private void queryTable(String partitionKey, String sortKey)
+    private QueryResult queryTable(String partitionKey, String sortKey)
     {
         Table table = dynamoDB.getTable(QNA_LIST_TABLE_NAME);
 
@@ -73,12 +73,23 @@ public class QueryTableLambda implements RequestHandler<QNABotFullfillmentReques
 
         ItemCollection<QueryOutcome> items = table.query(querySpec);
 
+        QueryResult result = new QueryResult();
         Iterator<Item> iterator = items.iterator();
         Item item = null;
-        while (iterator.hasNext()) {
+
+        while (iterator.hasNext())
+        {
             item = iterator.next();
-            System.out.println(item.toJSONPretty());
+            String category = item.getString(QNA_LIST_SORT_KEY);
+            String value = item.getString(QNA_LIST_VALUE_KEY);
+
+            if (category.endsWith("#title"))
+                result.setTitle(value);
+            else
+                result.addItem(value);
         }
+
+        return result;
     }
 
     private String getTopic(QNABotFullfillmentRequest event)
