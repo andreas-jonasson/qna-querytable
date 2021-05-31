@@ -1,15 +1,15 @@
 {
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "^1.101.0",
-    "@aws-cdk/aws-applicationautoscaling": "^1.101.0",
-    "@aws-cdk/aws-dynamodb": "^1.101.0",
-    "@aws-cdk/aws-iam": "^1.101.0",
-    "@aws-cdk/aws-lambda": "^1.101.0",
-    "@aws-cdk/aws-lambda-event-sources": "^1.101.0",
-    "@aws-cdk/aws-route53": "^1.101.0",
-    "@aws-cdk/aws-route53-targets": "^1.101.0",
-    "@aws-cdk/aws-s3": "^1.101.0",
-    "@aws-cdk/core": "^1.101.0",
-    "@aws-cdk/custom-resources": "^1.101.0"
+    "@aws-cdk/aws-apigateway": "^1.106.1",
+    "@aws-cdk/aws-applicationautoscaling": "^1.106.1",
+    "@aws-cdk/aws-dynamodb": "^1.106.1",
+    "@aws-cdk/aws-iam": "^1.106.1",
+    "@aws-cdk/aws-lambda": "^1.106.1",
+    "@aws-cdk/aws-lambda-event-sources": "^1.106.1",
+    "@aws-cdk/aws-route53": "^1.106.1",
+    "@aws-cdk/aws-route53-targets": "^1.106.1",
+    "@aws-cdk/aws-s3": "^1.106.1",
+    "@aws-cdk/core": "^1.106.1",
+    "@aws-cdk/custom-resources": "^1.106.1"
   }
 }
