@@ -52,35 +52,13 @@ public class QueryResult
 
         stringBuilder.append("# ").append(title).append("  \n");
         for (String item : items)
-            stringBuilder.append(item).append("\\  \n");
+            stringBuilder.append(item).append("  \n");
 
         return stringBuilder.toString();
     }
 
     public String toJson()
     {
-        /*
-        StringBuilder stringBuilder = new StringBuilder();
-        boolean first = true;
-
-        stringBuilder.append("{ \"title\": \"" + title + "\", \"items\": [");
-
-        for (String item : items)
-        {
-            if (first)
-            {
-                stringBuilder.append("\"").append(item).append("\"");
-                first = false;
-            }
-            else
-                stringBuilder.append(", ").append("\"").append(item).append("\"");
-        }
-
-        stringBuilder.append("]}");
-
-        return stringBuilder.toString();
-
-         */
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(this);
     }
