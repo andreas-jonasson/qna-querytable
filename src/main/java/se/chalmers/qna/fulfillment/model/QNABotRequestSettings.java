@@ -45,7 +45,7 @@ public class QNABotRequestSettings
     public String[]    IDENTITY_PROVIDER_JWKS_URLS;
     public String      ENABLE_MULTI_LANGUAGE_SUPPORT;
     public double      MINIMUM_CONFIDENCE_SCORE;
-    public String[]    ALT_SEARCH_KENDRA_INDEXES;
+    public String      ALT_SEARCH_KENDRA_INDEXES;
     public int         ELICIT_RESPONSE_MAX_RETRIES;
     public String      ELICIT_RESPONSE_RETRY_MESSAGE;
     public String      ELICIT_RESPONSE_BOT_FAILURE_MESSAGE;

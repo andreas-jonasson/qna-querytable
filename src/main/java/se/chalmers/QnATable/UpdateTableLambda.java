@@ -30,20 +30,23 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private LambdaLogger logger;
     private static final String QNA_LIST_TABLE_NAME = System.getenv("QNA_LIST_TABLE_NAME");
-    private static final String QNA_LIST_PRIMARY_KEY = System.getenv("QNA_LIST_PRIMARY_KEY");
-    private static final String QNA_LIST_SORT_KEY =  System.getenv("QNA_LIST_SORT_KEY");
+    private static final String QNA_LIST_PRIMARY_KEY = System.getenv("QNA_LIST_PARTITION_KEY");
     private static final String QNA_LIST_VALUE_KEY =  System.getenv("QNA_LIST_VALUE_KEY");
-    private Set<TableRow> rows = new HashSet<>();
 
 
     @Override
     public String handleRequest(S3Event event, Context context)
     {
+        HashMap<String, QueryResult> topics = new HashMap<>();
+
         if (event == null && context == null)
         {
-            rows = parseLocalFile();
-            for (TableRow row : rows)
-                System.out.println(row);
+            topics = parseLocalFile();
+            for (String qid : topics.keySet())
+            {
+                System.out.println(topics.get(qid));
+            }
+
             System.exit(0);
         }
 
@@ -67,8 +70,8 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         try
         {
              // Change to insert all the values at once!
-             parseFile(objectData, rows, topic);
-             updateQnaTable();
+             parseFile(objectData, topics);
+             updateQnaTable(topics);
         }
         catch (IOException e)
         {
@@ -83,12 +86,12 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
         new UpdateTableLambda().handleRequest(null, null);
     }
 
-    public static Set<TableRow> parseLocalFile()
+    public HashMap<String, QueryResult> parseLocalFile()
     {
         File startDir = new File(System.getProperty("user.dir"));
         File testFile = new File(startDir + "\\src\\test\\resources\\", "fruit.csv");
         InputStream inputStream = null;
-        Set<TableRow> rows = new HashSet<>();
+        HashMap<String, QueryResult> topics = new HashMap<>();
 
         try
         {
@@ -102,7 +105,7 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
 
         try
         {
-            parseFile(inputStream, rows, "fruit");
+            parseFile(inputStream, topics);
         }
         catch (IOException e)
         {
@@ -110,10 +113,10 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
             System.exit(1);
         }
 
-        return rows;
+        return topics;
     }
 
-    private static void parseFile(InputStream inputStream, Set<TableRow> rows, String topic) throws IOException
+    private static void parseFile(InputStream inputStream, HashMap<String, QueryResult> topics) throws IOException
     {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
@@ -121,12 +124,12 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
 
         while((line = reader.readLine()) != null)
         {
-            parseLine(line, rownumber, rows, topic);
+            parseLine(line, rownumber, topics);
             rownumber++;
         }
     }
 
-    private static void parseLine(String line, int rownumber, Set<TableRow> rows, String topic)
+    private static void parseLine(String line, int rownumber, HashMap<String, QueryResult> topics)
     {
         String[] parts = line.split(";");
 
@@ -138,32 +141,43 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
 
         String sortKey = parts[0].toLowerCase();
         String value = parts[1];
+        String qid;
 
-        if (!sortKey.endsWith("#title"))
-        {
-            if (rownumber <= 9)
-                sortKey = sortKey + "_0" + rownumber;
-            else
-                sortKey = sortKey + "_" + rownumber;
-        }
+        if (sortKey.endsWith("#title"))
+            qid = sortKey.substring(0, sortKey.lastIndexOf('#'));
+        else
+            qid = sortKey;
 
-        rows.add(new TableRow(topic, sortKey, value));
+
+        QueryResult currentResult = topics.get(qid);
+
+        if (currentResult == null)
+            currentResult = new QueryResult();
+
+
+        // Pad a number to entries avoid collisions. Order in csv-file becomes the sort order in output.
+        if (sortKey.endsWith("#title"))
+            currentResult.setTitle(value);
+        else
+            currentResult.addItem(value);
+
+        topics.put(qid, currentResult);
     }
 
-    private void updateQnaTable()
+    private void updateQnaTable(HashMap<String, QueryResult> topics)
     {
-        logger.log("seedDynamoTable()\nTable: " + QNA_LIST_TABLE_NAME + "\nprimary key: " + QNA_LIST_PRIMARY_KEY +
-                "\nsort key: " + QNA_LIST_SORT_KEY + "\nvalue key: " + QNA_LIST_VALUE_KEY);
+        logger.log("updateQnaTable()\nTable: " + QNA_LIST_TABLE_NAME +
+                "\nprimary key: " + QNA_LIST_PRIMARY_KEY +
+                "\nvalue key: " + QNA_LIST_VALUE_KEY);
 
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
 
-        for (TableRow row : rows)
+        for (String qid : topics.keySet())
         {
             HashMap<String, AttributeValue> itemValues = new HashMap<String, AttributeValue>();
 
-            itemValues.put(QNA_LIST_PRIMARY_KEY, new AttributeValue().withS(row.primaryKey));
-            itemValues.put(QNA_LIST_SORT_KEY, new AttributeValue().withS(row.sortingKey));
-            itemValues.put(QNA_LIST_VALUE_KEY, new AttributeValue().withS(row.value));
+            itemValues.put(QNA_LIST_PRIMARY_KEY, new AttributeValue().withS(qid));
+            itemValues.put(QNA_LIST_VALUE_KEY, new AttributeValue().withS(topics.get(qid).toJson()));
 
             PutItemRequest putItemRequest = new PutItemRequest()
                     .withTableName(QNA_LIST_TABLE_NAME)

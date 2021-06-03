@@ -33,7 +33,6 @@ public class QnaQuerytableStack extends Stack
         //=======================================================================
         // Create a DynamoDB table for the QnA-bot lists
         // partition key := "Topic"
-        // sort key := "Sort"
         // Example: fruit:yellow -> lemon
         //=======================================================================
 
@@ -41,14 +40,9 @@ public class QnaQuerytableStack extends Stack
                 .name(QNA_LIST_PARTITION_KEY)
                 .type(AttributeType.STRING).build();
 
-        Attribute sortKeyAttribute = Attribute.builder()
-                .name(QNA_LIST_SORT_KEY)
-                .type(AttributeType.STRING).build();
-
         Table qnaListTable = new Table(this, "qna-list-table", TableProps.builder()
                 .tableName(QNA_LIST_TABLE_NAME)
                 .partitionKey(primaryKeyAttribute)
-                .sortKey(sortKeyAttribute)
                 .build());
 
         CfnOutput.Builder.create(this, "qna-list-table-output")
@@ -93,7 +87,6 @@ public class QnaQuerytableStack extends Stack
         {{
             put("QNA_LIST_TABLE_NAME", QNA_LIST_TABLE_NAME);
             put("QNA_LIST_PARTITION_KEY", QNA_LIST_PARTITION_KEY);
-            put("QNA_LIST_SORT_KEY", QNA_LIST_SORT_KEY);
             put("QNA_LIST_VALUE_KEY", QNA_LIST_VALUE_KEY);
         }};
 

@@ -1,10 +1,10 @@
-yellow#title;These are the sunshine fruits:
-yellow;Lemon
-yellow;Banana
-yellow;Peach
-green#title;The good green fruits are:
-green;Apple
-green;Grape
-purple#title;The purple fruits are:
-purple;Grape
-purple;Plum
+list_yellow_fruits#title;These are the sunshine fruits:
+list_yellow_fruits;Lemon
+list_yellow_fruits;Banana
+list_yellow_fruits;Peach
+list_green_fruits#title;The good green fruits are:
+list_green_fruits;Apple
+list_green_fruits;Grape
+list_purple_fruits#title;The purple fruits are:
+list_purple_fruits;Grape
+list_purple_fruits;Plum

@@ -1,5 +1,7 @@
 package se.chalmers.QnATable;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
+
 import java.util.HashSet;
 
 public class QueryResult
@@ -30,8 +32,12 @@ public class QueryResult
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(title).append('\n');
+
         for (String item : items)
-            stringBuilder.append('\t').append(item).append('\n');
+        {
+            if (item != null && item.length() > 1)
+                stringBuilder.append('\t').append(item).append("\n");
+        }
 
         return stringBuilder.toString();
     }
@@ -46,6 +52,26 @@ public class QueryResult
         stringBuilder.append("#").append(title).append('\n');
         for (String item : items)
             stringBuilder.append(item).append("\\\n");
+
+        return stringBuilder.toString();
+    }
+
+    public String toJson()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        boolean first = true;
+
+        stringBuilder.append("{ \"title\": " + title + ", \"items\": [");
+
+        for (String item : items)
+        {
+            if (first)
+                stringBuilder.append("\"").append(item).append("\"");
+            else
+                stringBuilder.append(", ").append("\"").append(item).append("\"");
+        }
+
+        stringBuilder.append("]}");
 
         return stringBuilder.toString();
     }
