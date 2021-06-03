@@ -154,7 +154,7 @@ public class QnaQuerytableStack extends Stack
                 .role(lambdaApiRole)
                 .environment(lambdaEnvMap)
                 .timeout(Duration.seconds(30))
-                .memorySize(1024)
+                .memorySize(2048)
                 .build());
 
         qnaListTable.grantReadData(queryLambda);

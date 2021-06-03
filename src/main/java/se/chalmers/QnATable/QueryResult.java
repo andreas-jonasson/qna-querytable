@@ -1,6 +1,7 @@
 package se.chalmers.QnATable;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.HashSet;
 
@@ -49,24 +50,28 @@ public class QueryResult
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("#").append(title).append('\n');
+        stringBuilder.append("# ").append(title).append("  \n");
         for (String item : items)
-            stringBuilder.append(item).append("\\\n");
+            stringBuilder.append(item).append("\\  \n");
 
         return stringBuilder.toString();
     }
 
     public String toJson()
     {
+        /*
         StringBuilder stringBuilder = new StringBuilder();
         boolean first = true;
 
-        stringBuilder.append("{ \"title\": " + title + ", \"items\": [");
+        stringBuilder.append("{ \"title\": \"" + title + "\", \"items\": [");
 
         for (String item : items)
         {
             if (first)
+            {
                 stringBuilder.append("\"").append(item).append("\"");
+                first = false;
+            }
             else
                 stringBuilder.append(", ").append("\"").append(item).append("\"");
         }
@@ -74,5 +79,9 @@ public class QueryResult
         stringBuilder.append("]}");
 
         return stringBuilder.toString();
+
+         */
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
     }
 }

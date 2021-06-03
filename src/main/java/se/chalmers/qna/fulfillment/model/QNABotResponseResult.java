@@ -37,6 +37,7 @@ public class QNABotResponseResult
     public String quniqueterms;
     public QNABotResponseResultQuestions[] questions;
     public String a;
+    public QNABotResponseResultAlt alt;
     public String l;
     public String[] args;
     public String type;
