@@ -4,34 +4,56 @@ Upload lists to a bucket that can be queried from the QnA-bot.
 
 ![Design](design.png)
 
-## Example
+## Usage
 
-fruits.csv:
+Create a csv-file that contain the list you would like to query. The syntax is
+as follows:
 
-> yellow#tittle;These are the sunshine fruits:\
-> yellow;Banana\
-> yellow;Lemon\
-> green#title;Green is good!\
-> green;Lime\
-> green;Grape
+question_id#title;Title for this category of items.
 
-In QnA-bot:
+or
 
-list green fruit
+question_id;Item1
 
-Green is good!\
-Lime\
-Grape
+You can specify many categories in one file or split them into many files.
+
+Example: fruits.csv
+
+> list_yellow_fruits#title;These are the sunshine fruits: \
+list_yellow_fruits;Lemon \
+list_yellow_fruits;Banana \
+list_yellow_fruits;Peach \
+list_green_fruits#title;The good green fruits are: \
+list_green_fruits;Apple \
+list_green_fruits;Grape 
+
+## In QnA-bot Designer
+* Create questions with the same question_id as the csv-file
+* Add a default answer in case the lambda fails
+* Add the ARN for the QNA-query-table-lambda
+
+## In the QnA-bot client
+Write a matching question and get the list. Example:
+
+User:
+> list the sunshine fruits
+
+Chatbot:
+> ### These are the sunshine fruits:
+>Lemon\
+Banana\
+Peach
 
 # Quick installation
+Edit the cloud formation template to point out the qna-querytable.jar and run it from cloud formation. 
 
 # Advanced installation
-
-
+* Install AWS CLI
+* Install AWS CDK
+* clone repository
+* npn cdk deploy --profile QnA-Admin
 
 # Welcome to your CDK Java project!
-
-This is a blank project for Java development with CDK.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 

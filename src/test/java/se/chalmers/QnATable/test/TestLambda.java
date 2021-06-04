@@ -5,14 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.Test;
 import se.chalmers.QnATable.QueryTableLambda;
-import se.chalmers.qna.fulfillment.model.QNABotFullfillmentRequest;
 
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import java.io.*;
 
 public class TestLambda
 {
@@ -21,9 +15,10 @@ public class TestLambda
     @Test
     public void testStack() throws IOException
     {
-        //Fix later
-        //FileReader reader = new FileReader(new File("src/test/resources/qna-request-event.json"));
-        //new QueryTableLambda().handleRequest(reader, null);
+        FileInputStream inputStream = new FileInputStream(new File("src/test/resources/qna-request-event.json"));
+        OutputStream outputStream = new ByteArrayOutputStream();
+        new QueryTableLambda().handleRequest(inputStream, outputStream, null);
 
+        System.out.println(outputStream);
     }
 }

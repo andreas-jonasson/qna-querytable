@@ -5,12 +5,9 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.*;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.*;
-import se.chalmers.qna.fulfillment.model.QNABotFullfillmentRequest;
 
-import javax.sound.midi.SysexMessage;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -29,8 +26,6 @@ public class QueryTableLambda implements RequestStreamHandler
     public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException
     {
         HashMap<String, QueryResult> topics = new HashMap<>();
-        logger = context.getLogger();
-        String event = getEventAsString(inputStream);
 
         if (context == null)
         {
@@ -42,6 +37,9 @@ public class QueryTableLambda implements RequestStreamHandler
 
             System.exit(0);
         }
+
+        logger = context.getLogger();
+        String event = getEventAsString(inputStream);
 
         logger.log("Inside SeedDynamoDB::handleRequest");
         logger.log("Event:\n" + event);
