@@ -6,7 +6,7 @@ Upload lists to a bucket that can be queried from the QnA-bot.
 
 # Install QnA Query Table in Cloud 9
 
-* Log into your AWS console
+* Log into your AWS console with the QnA-bot account
 * Make sure you are in the same region as the QnA bot
 * Open Cloud9
 * Create environment
