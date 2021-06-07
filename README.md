@@ -70,6 +70,11 @@ list_green_fruits#title;The good green fruits are: \
 list_green_fruits;Apple \
 list_green_fruits;Grape 
 
+## Copy the csv-file to the qna-list-bucket
+Use the console or aws cli. Something like this:
+
+> aws cp fruits.csv s3://qna-list-bucket/fruits.csv --profile QnA-Admin
+
 ## In QnA-bot Designer
 * Create questions with the same question_id as the csv-file
 * Add a default answer in case the lambda fails
