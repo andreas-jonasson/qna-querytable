@@ -4,6 +4,49 @@ Upload lists to a bucket that can be queried from the QnA-bot.
 
 ![Design](design.png)
 
+# Install QnA Query Table in Cloud 9
+
+* Log into your AWS console
+* Make sure you are in the same region as the QnA bot
+* Open Cloud9
+* Create environment
+* Step1: QnA query table. Environment for deploying QnA query table.
+* Step2: Accept all defaults
+* Step3: Create
+* Install node.js in the Cloud9 shell:
+  > nvm install node
+>
+![install_node.png](install_node.png)
+
+* Install Maven
+  > cd \
+  > wget https://ftp.acc.umu.se/mirror/apache.org/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.tar.gz \
+  > tar xvf apache-maven-3.8.1-bin.tar.gz \
+  > export PATH=/home/ec2-user/apache-maven-3.8.1/bin:$PATH
+
+* Clone the Query table git:
+  > cd ~/environment \
+  > git clone https://github.com/andreas-jonasson/qna-querytable.git \
+  > cd qna-querytable
+
+* Install AWS CDK:
+  > npm install -g aws-cdk --force
+
+* Install the required AWS CDK packages:
+  > npx npm-check-updates -u \
+  > npm install
+
+* Booststrap AWS CDK:
+  > npx cdk bootstrap
+
+* Deploy the Query table:
+  > npx cdk deploy
+
+* Note the ARN of the query table lambda function:
+  > QnaQuerytableStack.qnatablequerylambdaoutput = Your-ARN
+
+Done!
+
 ## Usage
 
 Create a csv-file that contain the list you would like to query. The syntax is
@@ -43,29 +86,3 @@ Chatbot:
 >Lemon\
 Banana\
 Peach
-
-# Quick installation
-Edit the cloud formation template to point out the qna-querytable.jar and run it from cloud formation. 
-
-# Advanced installation
-* Install AWS CLI
-* Install AWS CDK
-* clone repository
-* npn cdk deploy --profile QnA-Admin
-
-# Welcome to your CDK Java project!
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-It is a [Maven](https://maven.apache.org/) based project, so you can open this project with any Maven compatible Java IDE to build and run tests.
-
-## Useful commands
-
- * `mvn package`     compile and run tests
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
