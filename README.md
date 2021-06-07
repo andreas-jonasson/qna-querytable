@@ -36,7 +36,7 @@ Upload lists to a bucket that can be queried from the QnA-bot.
   > npx npm-check-updates -u \
   > npm install
 
-* Booststrap AWS CDK:
+* Bootstrap AWS CDK:
   > npx cdk bootstrap
 
 * Deploy the Query table:
