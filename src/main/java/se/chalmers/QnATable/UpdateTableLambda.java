@@ -133,7 +133,7 @@ public class UpdateTableLambda implements RequestHandler<S3Event, String>
     {
         String[] parts = line.split(";");
 
-        if (parts == null || parts.length < 2)
+        if (parts.length < 2)
         {
             System.err.println("Discarding bad input on line#: " + rownumber + "\t" + line);
             return;
