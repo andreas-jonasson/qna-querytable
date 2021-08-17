@@ -1,0 +1,86 @@
+/* Title bar of the chat frame */
+.toolbar.theme--dark {
+    background-color: #003050 !important;
+}
+
+.toolbar__title {
+    font-family: "Open sans"; !important;
+    font-size: 16px; !important;
+    color: ffffff !important;
+}
+
+/* Response area of the chat frame */
+.message-list-container {
+  background-color: #e2e5ea !important
+}
+
+/* Messages from bot Set background of the bot's response messages */
+.message-bot .message-bubble {
+  background-color: #bee3dd !important;
+}
+
+/* Messages from human */
+.message-human .message-bubble {
+  background-color: #bfb7b1 !important;
+}
+
+/* Message bubble margins */
+.message-bubble p {
+    margin-bottom: 8px;
+}
+
+.message-bubble p:last-child {
+    margin-bottom: 0px;
+}
+
+/* Message bubble borders */
+.message-bubble {
+    border-radius: 10px !important;
+    padding: 2px 18px !important;
+}
+
+/* Message bubble text */
+.message-bubble .message-text {
+    font-family: "Open sans"; !important;
+    padding-left:  0;
+    padding-right: 0;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Message text color */
+.message-text {
+  color: #000000
+}
+
+/* Response card titles and text */
+.headline {
+    font-size: 1.2rem !important;
+    line-height: 1.4 !important;
+}
+
+.card__title {
+    padding: 10px 16px !important;
+}
+
+.card__text {
+    padding: 8px 16px 16px !important;
+    font-family: "Open sans"; !important;
+    line-height: 1.4;
+}
+
+/* Response card buttons - margins, background-color */
+.card__actions .btn {
+  margin: 4px 4px !important;
+  font-size: 1em !important;
+  min-width: 44px !important;
+  background-color: ##bee3dd !important;
+}
+
+
+/* Input text area font size */
+.input-group--text-field input,
+.input-group--text-field textarea,
+.input-group--text-field label {
+    font-size: 14px !important;
+}
